@@ -1,5 +1,6 @@
 import cv2
 import mediapipe as mp
+from cam import abrir_camera  
 
 # Inicializa o mediapipe para detecção de postura
 mp_pose = mp.solutions.pose
@@ -41,9 +42,8 @@ def desenhar_silhueta_pontos(imagem, pontos):
 
 # Função para processar o vídeo da câmera em tempo real
 def processar_camera():
-    captura = cv2.VideoCapture(0)  # Acessa a câmera padrão
-    if not captura.isOpened():
-        print("Erro ao acessar a câmera")
+    captura = abrir_camera()
+    if not captura or not captura.isOpened():
         return
 
     while True:
@@ -63,11 +63,12 @@ def processar_camera():
         cv2.imshow('Detecção de Postura', quadro)
 
         # Pressionar 'q' para sair
-        if cv2.waitKey(1) & 0xFF == ord('s'):
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
     captura.release()
     cv2.destroyAllWindows()
 
 # Inicia o processamento da câmera
-processar_camera()
+if __name__ == "__main__":
+    processar_camera()
