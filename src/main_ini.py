@@ -1,6 +1,14 @@
 import cv2
 import mediapipe as mp
-from cam import abrir_camera  
+
+def abrir_camera():
+    captura = cv2.VideoCapture(0)
+    
+    if not captura.isOpened():
+        print("Erro ao abrir a câmera")
+        return captura
+    
+    return captura
 
 # Inicializa o mediapipe para detecção de postura
 mp_pose = mp.solutions.pose
