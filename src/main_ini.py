@@ -6,7 +6,7 @@ def abrir_camera():
     
     if not captura.isOpened():
         print("Erro ao abrir a câmera")
-        return captura
+        return None
     
     return captura
 
@@ -49,11 +49,7 @@ def desenhar_silhueta_pontos(imagem, pontos):
         cv2.circle(imagem, (x, y), 5, (0, 255, 0), -1)  # Verde (BGR)
 
 # Função para processar o vídeo da câmera em tempo real
-def processar_camera():
-    captura = abrir_camera()
-    if not captura or not captura.isOpened():
-        return
-
+def processar_camera(captura):
     while True:
         sucesso, quadro = captura.read()
         if not sucesso:
@@ -79,4 +75,6 @@ def processar_camera():
 
 # Inicia o processamento da câmera
 if __name__ == "__main__":
-    processar_camera()
+    captura = abrir_camera()
+    if captura:
+        processar_camera(captura)
