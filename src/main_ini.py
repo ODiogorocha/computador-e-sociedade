@@ -67,7 +67,7 @@ def processar_camera(captura):
         cv2.imshow('Detecção de Postura', quadro)
 
         # Pressionar 'q' para sair
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        if cv2.waitKey(1) & 0xFF == ord('s'):
             break
 
     captura.release()
