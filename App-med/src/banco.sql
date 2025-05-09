@@ -11,8 +11,8 @@ CREATE TABLE paciente (
 
 CREATE TABLE medico (
     idMedico INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100),         -- Campo adicional para armazenar o nome do médico
-    especialidade VARCHAR(100) -- Campo opcional para indicar a especialidade
+    nome VARCHAR(100),         
+    especialidade VARCHAR(100) 
 );
 
 CREATE TABLE consulta (
