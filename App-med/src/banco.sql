@@ -1,26 +1,29 @@
-CREATE DATABASE cadastro_med;
-
+CREATE DATABASE IF NOT EXISTS cadastro_med;
 USE cadastro_med;
 
-CREATE TABLE paciente (
+
+CREATE TABLE IF NOT EXISTS paciente (
     idPaciente INT AUTO_INCREMENT PRIMARY KEY,
-    prioridade INT,
-    fx_etaria VARCHAR(50),
-    doenca VARCHAR(500)
+    nome VARCHAR(100) NOT NULL,           
+    prioridade INT NOT NULL,
+    fx_etaria VARCHAR(50) NOT NULL,
+    doenca VARCHAR(500) NOT NULL
 );
 
-CREATE TABLE medico (
+
+CREATE TABLE IF NOT EXISTS medico (
     idMedico INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100),         
-    especialidade VARCHAR(100) 
+    nome VARCHAR(100) NOT NULL,
+    especialidade VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE consulta (
+
+CREATE TABLE IF NOT EXISTS consulta (
     idConsulta INT AUTO_INCREMENT PRIMARY KEY,
-    data DATE,
-    hora TIME,
-    paciente_idpaciente INT,
-    medico_idmedico INT,
+    data DATE NOT NULL,
+    hora TIME NOT NULL,
+    paciente_idpaciente INT NOT NULL,
+    medico_idmedico INT NOT NULL,
     FOREIGN KEY (paciente_idpaciente) REFERENCES paciente(idPaciente),
     FOREIGN KEY (medico_idmedico) REFERENCES medico(idMedico)
 );
