@@ -12,13 +12,14 @@ class SistemaCadastroMedico:
 
     def inserir_paciente(self):
         print("\n----- INSERIR PACIENTE -----")
+        nome = input("Nome do paciente: ")
         prioridade = int(input("Prioridade do paciente (número): "))
         fx_etaria = input("Faixa etária: ")
         doenca = input("Descrição da doença: ")
         try:
             self.cursor.execute(
-                "INSERT INTO paciente (prioridade, fx_etaria, doenca) VALUES (%s, %s, %s)",
-                (prioridade, fx_etaria, doenca)
+                "INSERT INTO paciente (nome, prioridade, fx_etaria, doenca) VALUES (%s, %s, %s, %s)",
+                (nome, prioridade, fx_etaria, doenca)
             )
             self.conexao.commit()
             print("Paciente inserido com sucesso.\n")
@@ -65,10 +66,9 @@ class FilaPrioridade:
     def __init__(self, conexao):
         self.conexao = conexao
         self.cursor = conexao.cursor()
-    
+
     def calcular_peso_faixa_etaria(self, faixa):
         faixa = faixa.strip().lower()
-        
         match faixa:
             case "criança":
                 return 0
@@ -80,8 +80,8 @@ class FilaPrioridade:
                 return 3
             case _:
                 return 4
-            
-    def gerar_fila(self):
+
+    def obter_fila_ordenada(self):
         query = """
             SELECT 
                 p.fx_etaria,
@@ -98,22 +98,27 @@ class FilaPrioridade:
         self.cursor.execute(query)
         resultados = self.cursor.fetchall()
 
-        fila = []
+        fila_resultado = []
         for linha in resultados:
             faixa, prioridade, doenca, _, nome_medico, _, nome_paciente = linha
             peso_faixa = self.calcular_peso_faixa_etaria(faixa)
-            prioridade_total = prioridade * 10 + peso_faixa  # combinação da prioridade
-            fila.append((prioridade_total, nome_paciente, doenca, nome_medico, prioridade))
-        
-        # Ordenar pela menor prioridade_total
-            fila.sort(key=lambda x: x[0])
+            prioridade_total = prioridade * 10 + peso_faixa
+            fila_resultado.append({
+                "nome_paciente": nome_paciente,
+                "doenca": doenca,
+                "nome_medico": nome_medico,
+                "prioridade": prioridade_total
+            })
 
-            # Imprimir fila
-            print("\nFILA DE ATENDIMENTO PRIORITÁRIA")
-            print("Nome Paciente\tDoença\t\t\tNome Médico\t\tPrioridade")
-            print("-" * 60)
-            for _, nome_paciente, doenca, nome_medico, prioridade in fila:
-                print(f"{nome_paciente:<15}\t{doenca:<20}\t{nome_medico:<20}\t{prioridade}")
+        return sorted(fila_resultado, key=lambda x: x["prioridade"])
+
+    def imprimir_fila(self):
+        fila = self.obter_fila_ordenada()
+        print("\nFILA DE ATENDIMENTO PRIORITÁRIA")
+        print("Nome Paciente\tDoença\t\t\tNome Médico\t\tPrioridade")
+        print("-" * 60)
+        for item in fila:
+            print(f"{item['nome_paciente']:<15}\t{item['doenca']:<20}\t{item['nome_medico']:<20}\t{item['prioridade']}")
 
     def encerrar(self):
         self.cursor.close()
