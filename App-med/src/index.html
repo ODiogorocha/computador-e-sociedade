@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Fila de Atendimento - Hospital</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007BFF;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        table {
+            width: 90%;
+            margin: 2rem auto;
+            border-collapse: collapse;
+            background-color: white;
+        }
+
+        th, td {
+            border: 1px solid #aaa;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e0f0ff;
+        }
+
+        @media (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+                width: 100%;
+            }
+
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+                margin-bottom: 10px;
+            }
+
+            td:before {
+                position: absolute;
+                top: 0;
+                left: 10px;
+                width: 45%;
+                white-space: nowrap;
+                font-weight: bold;
+            }
+
+            td:nth-child(1):before { content: "Paciente"; }
+            td:nth-child(2):before { content: "Doença"; }
+            td:nth-child(3):before { content: "Médico"; }
+            td:nth-child(4):before { content: "Prioridade"; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Fila de Atendimento Prioritária</h1>
+    </header>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Paciente</th>
+                <th>Doença</th>
+                <th>Médico</th>
+                <th>Prioridade</th>
+            </tr>
+        </thead>
+        <tbody id="tabela-fila"></tbody>
+    </table>
+
+    <script>
+        async function carregarFila() {
+            const response = await fetch("http://localhost:5000/fila");
+            const fila = await response.json();
+
+            const tabela = document.getElementById("tabela-fila");
+            tabela.innerHTML = "";
+
+            fila.forEach(item => {
+                const linha = document.createElement("tr");
+
+                linha.innerHTML = `
+                    <td>${item.nome_paciente}</td>
+                    <td>${item.doenca}</td>
+                    <td>${item.nome_medico}</td>
+                    <td>${item.prioridade}</td>
+                `;
+
+                tabela.appendChild(linha);
+            });
+        }
+
+        carregarFila();
+        setInterval(carregarFila, 10000); // atualiza a cada 10s
+    </script>
+</body>
+</html>
