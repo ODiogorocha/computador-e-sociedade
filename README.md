@@ -50,6 +50,32 @@ Esta seção explora os principais avanços tecnológicos e sua influência na s
 
 ---
 
+## 🩺 SISTEMA DE CADASTRO MÉDICO (App)
+
+### 📋 Visão Geral
+O sistema de cadastro médico é uma aplicação Python integrada com **MySQL**, desenvolvida para gerenciar pacientes, médicos e consultas de forma estruturada.
+
+### 📂 Funcionalidades
+- Cadastro de pacientes com base em **prioridade** e **faixa etária**.
+- Cadastro de médicos e consultas.
+- Geração de **fila de prioridade** automática:
+  - Quanto menor o número de prioridade e mais sensível a faixa etária (como crianças e idosos), maior o posicionamento do paciente na fila.
+  - Impressão formatada de dados com nome do paciente, doença, médico responsável e prioridade.
+
+### 🛠 Estrutura do App
+O código está dividido em:
+- `sistemas.py`: contém a lógica de conexão com o banco e inserções.
+- `fila_prioridade.py`: gera e organiza a fila de pacientes com base em critérios definidos.
+- `main.py`: interface de menu para interação textual com o sistema.
+
+### 🗄 Banco de Dados
+O sistema utiliza uma base de dados MySQL com as seguintes tabelas:
+- `paciente(id, prioridade, fx_etaria, doenca)`
+- `medico(id, nome, especialidade)`
+- `consulta(id, data, hora, paciente_id, medico_id)`
+
+---
+
 ## 🤖 INTELIGÊNCIA ARTIFICIAL
 
 ### 🔍 Diferentes Práticas
@@ -69,4 +95,3 @@ Esta seção explora os principais avanços tecnológicos e sua influência na s
 Este workshop foi desenvolvido por:
 - [ODiogorocha](https://github.com/ODiogorocha)
 - [WeslleyHBM](https://github.com/WeslleyHBM)
-
