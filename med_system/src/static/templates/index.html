@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Página Inicial - MedSystem{% endblock %}
+
+{% block content %}
+<div class="bg-gradient-to-b from-blue-500 to-blue-700 text-white py-20">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">Sistema de Cadastro Médico</h1>
+        <p class="text-xl md:text-2xl mb-8">Gerenciamento eficiente de pacientes, médicos e consultas com fila de prioridade inteligente</p>
+        
+        <div class="flex flex-col md:flex-row justify-center gap-4">
+            {% if not session.get('user_id') %}
+                <a href="{{ url_for('auth.login') }}" class="bg-white text-blue-700 hover:bg-blue-50 py-3 px-6 rounded-lg font-semibold text-lg transition-colors">
+                    Entrar no Sistema
+                </a>
+                <a href="{{ url_for('auth.registro') }}" class="bg-transparent border-2 border-white hover:bg-white hover:text-blue-700 text-white py-3 px-6 rounded-lg font-semibold text-lg transition-colors">
+                    Registrar-se
+                </a>
+            {% else %}
+                {% if session.get('user_type') == 'medico' %}
+                    <a href="{{ url_for('medico.dashboard') }}" class="bg-white text-blue-700 hover:bg-blue-50 py-3 px-6 rounded-lg font-semibold text-lg transition-colors">
+                        Acessar Dashboard Médico
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('paciente.dashboard') }}" class="bg-white text-blue-700 hover:bg-blue-50 py-3 px-6 rounded-lg font-semibold text-lg transition-colors">
+                        Acessar Dashboard Paciente
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Principais Funcionalidades</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-blue-50 p-6 rounded-lg shadow-md">
+                <div class="bg-blue-100 p-3 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                    <i class="fas fa-user-md text-blue-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Perfil Médico</h3>
+                <p class="text-gray-600">Acesso completo aos dados dos pacientes, histórico de consultas, doenças e medicamentos. Gerencie sua agenda e prioridades de atendimento.</p>
+            </div>
+            
+            <div class="bg-green-50 p-6 rounded-lg shadow-md">
+                <div class="bg-green-100 p-3 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                    <i class="fas fa-user-injured text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Perfil Paciente</h3>
+                <p class="text-gray-600">Acompanhe sua posição na fila de atendimento, mantenha seu histórico médico atualizado e gerencie suas consultas de forma simples.</p>
+            </div>
+            
+            <div class="bg-purple-50 p-6 rounded-lg shadow-md">
+                <div class="bg-purple-100 p-3 rounded-full w-16 h-16 flex items-center justify-center mb-4">
+                    <i class="fas fa-sort-amount-down text-purple-600 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-2">Fila de Prioridade</h3>
+                <p class="text-gray-600">Sistema inteligente que organiza o atendimento considerando gravidade, faixa etária e ordem de chegada para otimizar o fluxo de pacientes.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Como Funciona</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 rounded-full w-10 h-10 flex items-center justify-center mr-4">
+                            <span class="text-blue-600 font-bold">1</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800">Cadastro no Sistema</h3>
+                    </div>
+                    <p class="text-gray-600 pl-14">Registre-se como médico ou paciente, fornecendo suas informações básicas para acesso ao sistema.</p>
+                </div>
+                
+                <div class="mb-8">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 rounded-full w-10 h-10 flex items-center justify-center mr-4">
+                            <span class="text-blue-600 font-bold">2</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800">Atualização de Dados</h3>
+                    </div>
+                    <p class="text-gray-600 pl-14">Mantenha seu perfil atualizado com informações de saúde, doenças e medicamentos em uso.</p>
+                </div>
+                
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 rounded-full w-10 h-10 flex items-center justify-center mr-4">
+                            <span class="text-blue-600 font-bold">3</span>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800">Acompanhamento em Tempo Real</h3>
+                    </div>
+                    <p class="text-gray-600 pl-14">Visualize sua posição na fila de atendimento e receba atualizações em tempo real sobre o status da sua consulta.</p>
+                </div>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="border-l-4 border-blue-500 pl-4 py-2 mb-6">
+                    <h3 class="text-xl font-semibold text-gray-800">Benefícios do Sistema</h3>
+                </div>
+                
+                <ul class="space-y-4">
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                        <span class="text-gray-600">Redução do tempo de espera com organização inteligente da fila</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                        <span class="text-gray-600">Histórico médico completo e acessível para melhor atendimento</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                        <span class="text-gray-600">Priorização automática de casos mais urgentes</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                        <span class="text-gray-600">Interface intuitiva para médicos e pacientes</span>
+                    </li>
+                    <li class="flex items-start">
+                        <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                        <span class="text-gray-600">Gerenciamento eficiente de consultas e atendimentos</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

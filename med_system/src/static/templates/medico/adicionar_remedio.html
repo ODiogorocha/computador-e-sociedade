@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Adicionar Remédio - MedSystem{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+        <a href="{{ url_for('medico.ver_paciente', paciente_id=paciente.id) }}" class="text-blue-600 hover:text-blue-800">
+            <i class="fas fa-arrow-left mr-2"></i> Voltar para detalhes do paciente
+        </a>
+    </div>
+    
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Adicionar Remédio para {{ paciente.nome }}</h1>
+        
+        <form action="{{ url_for('medico.adicionar_remedio', paciente_id=paciente.id) }}" method="POST">
+            <div class="mb-4">
+                <label for="remedio_id" class="block text-sm font-medium text-gray-700 mb-2">Remédio</label>
+                <select id="remedio_id" name="remedio_id" required class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    <option value="">Selecione um remédio</option>
+                    {% for remedio in remedios %}
+                        <option value="{{ remedio.id }}">{{ remedio.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label for="dosagem" class="block text-sm font-medium text-gray-700 mb-2">Dosagem</label>
+                <input type="text" id="dosagem" name="dosagem" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Ex: 500mg, 10ml, etc.">
+            </div>
+            
+            <div class="mb-4">
+                <label for="frequencia" class="block text-sm font-medium text-gray-700 mb-2">Frequência</label>
+                <input type="text" id="frequencia" name="frequencia" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="Ex: 3x ao dia, a cada 8 horas, etc.">
+            </div>
+            
+            <div class="mb-4">
+                <label for="data_fim" class="block text-sm font-medium text-gray-700 mb-2">Data de Término (opcional)</label>
+                <input type="date" id="data_fim" name="data_fim" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                <p class="mt-1 text-sm text-gray-500">Deixe em branco para tratamento contínuo.</p>
+            </div>
+            
+            <div class="flex justify-end">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">
+                    Adicionar Remédio
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

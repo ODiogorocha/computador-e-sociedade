@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Adicionar Doença - MedSystem{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+        <a href="{{ url_for('medico.ver_paciente', paciente_id=paciente.id) }}" class="text-blue-600 hover:text-blue-800">
+            <i class="fas fa-arrow-left mr-2"></i> Voltar para detalhes do paciente
+        </a>
+    </div>
+    
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Adicionar Doença para {{ paciente.nome }}</h1>
+        
+        <form action="{{ url_for('medico.adicionar_doenca', paciente_id=paciente.id) }}" method="POST">
+            <div class="mb-4">
+                <label for="doenca_id" class="block text-sm font-medium text-gray-700 mb-2">Doença</label>
+                <select id="doenca_id" name="doenca_id" required class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    <option value="">Selecione uma doença</option>
+                    {% for doenca in doencas %}
+                        <option value="{{ doenca.id }}">{{ doenca.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label for="nivel_gravidade" class="block text-sm font-medium text-gray-700 mb-2">Nível de Gravidade</label>
+                <select id="nivel_gravidade" name="nivel_gravidade" required class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                    <option value="1">1 - Muito Leve</option>
+                    <option value="2">2 - Leve</option>
+                    <option value="3" selected>3 - Moderada</option>
+                    <option value="4">4 - Grave</option>
+                    <option value="5">5 - Muito Grave</option>
+                </select>
+            </div>
+            
+            <div class="mb-4">
+                <label for="observacoes" class="block text-sm font-medium text-gray-700 mb-2">Observações</label>
+                <textarea id="observacoes" name="observacoes" rows="3" class="shadow-sm focus:ring-blue-500 focus:border-blue-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
+            </div>
+            
+            <div class="flex justify-end">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">
+                    Adicionar Doença
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Paciente - MedSystem{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Bem-vindo(a), {{ paciente.nome }}</h1>
+        <p class="text-gray-600">Faixa Etária: {{ paciente.fx_etaria }}</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {% if consulta_hoje %}
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <div class="flex items-center mb-4">
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <i class="fas fa-calendar-check text-blue-600 text-xl"></i>
+                    </div>
+                    <h2 class="ml-4 text-xl font-semibold text-gray-800">Consulta Hoje</h2>
+                </div>
+                <p class="text-gray-600">Médico: {{ consulta_hoje.medico.nome }}</p>
+                <p class="text-gray-600">Horário: {{ consulta_hoje.hora.strftime('%H:%M') }}</p>
+                
+                {% if posicao_fila %}
+                    <div class="mt-4 p-3 bg-blue-50 rounded-md">
+                        <p class="font-semibold text-blue-800">Sua posição na fila: {{ posicao_fila }}º</p>
+                    </div>
+                {% endif %}
+                
+                <a href="{{ url_for('paciente.fila') }}" class="mt-4 inline-block text-blue-600 hover:text-blue-800">Ver fila completa →</a>
+            </div>
+        {% else %}
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <div class="flex items-center mb-4">
+                    <div class="bg-gray-100 p-3 rounded-full">
+                        <i class="fas fa-calendar-check text-gray-600 text-xl"></i>
+                    </div>
+                    <h2 class="ml-4 text-xl font-semibold text-gray-800">Consultas</h2>
+                </div>
+                <p class="text-gray-600">Você não tem consultas agendadas para hoje.</p>
+                {% if consultas %}
+                    <p class="text-gray-600 mt-2">Próxima consulta: {{ consultas[0].data.strftime('%d/%m/%Y') }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+        
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="flex items-center mb-4">
+                <div class="bg-red-100 p-3 rounded-full">
+                    <i class="fas fa-heartbeat text-red-600 text-xl"></i>
+                </div>
+                <h2 class="ml-4 text-xl font-semibold text-gray-800">Minhas Doenças</h2>
+            </div>
+            <p class="text-gray-600">Total: {{ doencas|length }}</p>
+            <a href="{{ url_for('paciente.minhas_doencas') }}" class="mt-4 inline-block text-red-600 hover:text-red-800">Gerenciar →</a>
+        </div>
+        
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <div class="flex items-center mb-4">
+                <div class="bg-green-100 p-3 rounded-full">
+                    <i class="fas fa-pills text-green-600 text-xl"></i>
+                </div>
+                <h2 class="ml-4 text-xl font-semibold text-gray-800">Meus Remédios</h2>
+            </div>
+            <p class="text-gray-600">Total: {{ remedios|length }}</p>
+            <a href="{{ url_for('paciente.meus_remedios') }}" class="mt-4 inline-block text-green-600 hover:text-green-800">Gerenciar →</a>
+        </div>
+    </div>
+    
+    <div class="bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">Minhas Próximas Consultas</h2>
+        
+        {% if consultas %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hora</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Médico</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prioridade</th>
+                            <th class="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for consulta in consultas %}
+                            <tr>
+                                <td class="py-4 px-4 text-sm text-gray-900">{{ consulta.data.strftime('%d/%m/%Y') }}</td>
+                                <td class="py-4 px-4 text-sm text-gray-500">{{ consulta.hora.strftime('%H:%M') }}</td>
+                                <td class="py-4 px-4 text-sm text-gray-900">{{ consulta.medico.nome }}</td>
+                                <td class="py-4 px-4">
+                                    {% if consulta.prioridade == 1 %}
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Emergência</span>
+                                    {% elif consulta.prioridade == 2 %}
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">Alta</span>
+                                    {% elif consulta.prioridade == 3 %}
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Média</span>
+                                    {% elif consulta.prioridade == 4 %}
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Baixa</span>
+                                    {% else %}
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Normal</span>
+                                    {% endif %}
+                                </td>
+                                <td class="py-4 px-4">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Agendada</span>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-gray-500">Você não tem consultas agendadas.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

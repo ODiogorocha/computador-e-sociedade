@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Perfil - MedSystem{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-6">
+        <a href="{{ url_for('paciente.dashboard') }}" class="text-blue-600 hover:text-blue-800">
+            <i class="fas fa-arrow-left mr-2"></i> Voltar para dashboard
+        </a>
+    </div>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="rounded-md bg-{{ 'green' if category == 'success' else 'red' }}-50 p-4 mb-6">
+            <div class="flex">
+              <div class="ml-3">
+                <p class="text-sm font-medium text-{{ 'green' if category == 'success' else 'red' }}-800">
+                  {{ message }}
+                </p>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    
+    <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Meu Perfil</h1>
+        
+        <form action="{{ url_for('paciente.perfil') }}" method="POST">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label for="nome" class="block text-sm font-medium text-gray-700 mb-2">Nome Completo</label>
+                    <input type="text" id="nome" name="nome" value="{{ paciente.nome }}" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                </div>
+                
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="email" name="email" value="{{ paciente.email }}" required class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-2">Nome de Usuário</label>
+                    <input type="text" id="username" value="{{ paciente.username }}" disabled class="mt-1 bg-gray-100 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    <p class="mt-1 text-sm text-gray-500">O nome de usuário não pode ser alterado.</p>
+                </div>
+                
+                <div>
+                    <label for="data_nascimento" class="block text-sm font-medium text-gray-700 mb-2">Data de Nascimento</label>
+                    <input type="date" id="data_nascimento" value="{{ paciente.data_nascimento.strftime('%Y-%m-%d') }}" disabled class="mt-1 bg-gray-100 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    <p class="mt-1 text-sm text-gray-500">A data de nascimento não pode ser alterada.</p>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 pt-6 mt-6">
+                <h2 class="text-lg font-medium text-gray-800 mb-4">Alterar Senha</h2>
+                <p class="text-sm text-gray-500 mb-4">Deixe em branco se não deseja alterar sua senha.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="nova_senha" class="block text-sm font-medium text-gray-700 mb-2">Nova Senha</label>
+                        <input type="password" id="nova_senha" name="nova_senha" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                    
+                    <div>
+                        <label for="confirmar_senha" class="block text-sm font-medium text-gray-700 mb-2">Confirmar Nova Senha</label>
+                        <input type="password" id="confirmar_senha" name="confirmar_senha" class="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-end mt-6">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">
+                    Salvar Alterações
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
