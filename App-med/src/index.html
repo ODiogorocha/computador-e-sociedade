@@ -3,109 +3,79 @@
 <head>
     <meta charset="UTF-8">
     <title>Fila de Atendimento - Hospital</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            background-color: #007BFF;
-            color: white;
-            text-align: center;
-            padding: 1rem;
-        }
-
-        table {
-            width: 90%;
-            margin: 2rem auto;
-            border-collapse: collapse;
-            background-color: white;
-        }
-
-        th, td {
-            border: 1px solid #aaa;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #e0f0ff;
-        }
-
-        @media (max-width: 600px) {
-            table, thead, tbody, th, td, tr {
-                display: block;
-                width: 100%;
-            }
-
-            td {
-                border: none;
-                position: relative;
-                padding-left: 50%;
-                margin-bottom: 10px;
-            }
-
-            td:before {
-                position: absolute;
-                top: 0;
-                left: 10px;
-                width: 45%;
-                white-space: nowrap;
-                font-weight: bold;
-            }
-
-            td:nth-child(1):before { content: "Paciente"; }
-            td:nth-child(2):before { content: "Doença"; }
-            td:nth-child(3):before { content: "Médico"; }
-            td:nth-child(4):before { content: "Prioridade"; }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header>
-        <h1>Fila de Atendimento Prioritária</h1>
+<body class="bg-blue-50 text-gray-800 font-sans">
+
+    <header class="bg-blue-600 text-white text-center py-6 shadow-md">
+        <h1 class="text-2xl font-bold">Fila de Atendimento Prioritária</h1>
+        <p id="last-update" class="text-sm mt-2 text-blue-100">Atualizado agora</p>
     </header>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Paciente</th>
-                <th>Doença</th>
-                <th>Médico</th>
-                <th>Prioridade</th>
-            </tr>
-        </thead>
-        <tbody id="tabela-fila"></tbody>
-    </table>
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <div class="overflow-x-auto">
+            <table class="w-full bg-white rounded-lg shadow-md table-auto text-left">
+                <thead class="bg-blue-100">
+                    <tr>
+                        <th class="px-4 py-3 text-sm font-semibold">Paciente</th>
+                        <th class="px-4 py-3 text-sm font-semibold">Doença</th>
+                        <th class="px-4 py-3 text-sm font-semibold">Médico</th>
+                        <th class="px-4 py-3 text-sm font-semibold">Prioridade</th>
+                    </tr>
+                </thead>
+                <tbody id="queue-table-body" class="divide-y divide-gray-200">
+                    <!-- Dados da fila inseridos via JS -->
+                </tbody>
+            </table>
+        </div>
+    </main>
 
     <script>
-        async function carregarFila() {
-            const response = await fetch("http://localhost:5000/fila");
-            const fila = await response.json();
+        const PRIORITY_CLASSES = {
+            high: "bg-red-500 text-white font-bold text-center px-3 py-1 rounded-full text-sm",
+            medium: "bg-yellow-400 text-black font-semibold text-center px-3 py-1 rounded-full text-sm",
+            low: "bg-green-500 text-white font-medium text-center px-3 py-1 rounded-full text-sm"
+        };
 
-            const tabela = document.getElementById("tabela-fila");
-            tabela.innerHTML = "";
-
-            fila.forEach(item => {
-                const linha = document.createElement("tr");
-
-                linha.innerHTML = `
-                    <td>${item.nome_paciente}</td>
-                    <td>${item.doenca}</td>
-                    <td>${item.nome_medico}</td>
-                    <td>${item.prioridade}</td>
-                `;
-
-                tabela.appendChild(linha);
-            });
+        function getPriorityClass(priority) {
+            if (priority <= 10) return PRIORITY_CLASSES.high;
+            if (priority <= 20) return PRIORITY_CLASSES.medium;
+            return PRIORITY_CLASSES.low;
         }
 
-        carregarFila();
-        setInterval(carregarFila, 10000); // atualiza a cada 10s
+        async function loadQueue() {
+            try {
+                const response = await fetch("http://localhost:5000/fila");
+                const queue = await response.json();
+
+                const tableBody = document.getElementById("queue-table-body");
+                tableBody.innerHTML = "";
+
+                queue.forEach(({ nome_paciente, doenca, nome_medico, prioridade }) => {
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+                        <td class="px-4 py-3 text-sm">${nome_paciente}</td>
+                        <td class="px-4 py-3 text-sm">${doenca}</td>
+                        <td class="px-4 py-3 text-sm">${nome_medico}</td>
+                        <td class="px-4 py-3"><span class="${getPriorityClass(prioridade)}">${prioridade}</span></td>
+                    `;
+
+                    tableBody.appendChild(row);
+                });
+
+                const now = new Date().toLocaleString("pt-BR");
+                document.getElementById("last-update").textContent = `Atualizado em: ${now}`;
+
+            } catch (error) {
+                console.error("Erro ao carregar fila:", error);
+            }
+        }
+
+        loadQueue();
+        setInterval(loadQueue, 10000);
     </script>
+
 </body>
 </html>
