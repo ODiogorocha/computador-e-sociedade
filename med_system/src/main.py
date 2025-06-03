@@ -3,6 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 import sys
 
+# Adiciona o diretório pai ao path para importaçõesfrom flask import Flask, render_template, redirect, url_for, flash, request, session, jsonify
+from flask_sqlalchemy import SQLAlchemy
+import os
+import sys
+
 # Adiciona o diretório pai ao path para importações
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 

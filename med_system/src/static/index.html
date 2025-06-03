@@ -410,7 +410,7 @@
         <!-- Navegação por abas -->
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="pacientes-tab" data-bs-toggle="tab" data-bs-target="#pacientes" type="button" role="tab" aria-controls="pacientes" aria-selected="true">
+                <button class="nav-link" id="pacientes-tab" data-bs-toggle="tab" data-bs-target="#pacientes" type="button" role="tab" aria-controls="pacientes" aria-selected="false">
                     <i class="fas fa-user-injured"></i> Pacientes
                 </button>
             </li>
@@ -429,12 +429,17 @@
                     <i class="fas fa-hospital-alt"></i> Hospital
                 </button>
             </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="cadastrados-tab" data-bs-toggle="tab" data-bs-target="#cadastrados" type="button" role="tab" aria-controls="cadastrados" aria-selected="true">
+                    <i class="fas fa-users"></i> Usuários Cadastrados
+                </button>
+            </li>
         </ul>
         
         <!-- Conteúdo das abas -->
         <div class="tab-content" id="myTabContent">
             <!-- Aba de Pacientes -->
-            <div class="tab-pane fade show active" id="pacientes" role="tabpanel" aria-labelledby="pacientes-tab">
+            <div class="tab-pane fade" id="pacientes" role="tabpanel" aria-labelledby="pacientes-tab">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="card">
@@ -837,6 +842,88 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Nova Aba: Usuários Cadastrados -->
+            <div class="tab-pane fade show active" id="cadastrados" role="tabpanel" aria-labelledby="cadastrados-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-users"></i> Usuários Cadastrados no Sistema
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5>Lista de Todos os Usuários</h5>
+                            <div class="alert alert-success" role="alert">
+                                <i class="fas fa-info-circle"></i> Dados carregados automaticamente
+                            </div>
+                        </div>
+                        
+                        <ul class="nav nav-pills mb-3" id="usuarios-tab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="todos-usuarios-tab" data-bs-toggle="pill" data-bs-target="#todos-usuarios" type="button" role="tab" aria-controls="todos-usuarios" aria-selected="true">Todos</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="medicos-usuarios-tab" data-bs-toggle="pill" data-bs-target="#medicos-usuarios" type="button" role="tab" aria-controls="medicos-usuarios" aria-selected="false">Médicos</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="pacientes-usuarios-tab" data-bs-toggle="pill" data-bs-target="#pacientes-usuarios" type="button" role="tab" aria-controls="pacientes-usuarios" aria-selected="false">Pacientes</button>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content" id="usuarios-tabContent">
+                            <div class="tab-pane fade show active" id="todos-usuarios" role="tabpanel" aria-labelledby="todos-usuarios-tab">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nome</th>
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                            <th>Tipo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="todos-usuarios-lista">
+                                        <!-- Dados serão carregados automaticamente pelo JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="tab-pane fade" id="medicos-usuarios" role="tabpanel" aria-labelledby="medicos-usuarios-tab">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nome</th>
+                                            <th>CRM</th>
+                                            <th>Especialidade</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="medicos-usuarios-lista">
+                                        <!-- Dados serão carregados automaticamente pelo JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="tab-pane fade" id="pacientes-usuarios" role="tabpanel" aria-labelledby="pacientes-usuarios-tab">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Nome</th>
+                                            <th>Data Nascimento</th>
+                                            <th>Faixa Etária</th>
+                                            <th>Email</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pacientes-usuarios-lista">
+                                        <!-- Dados serão carregados automaticamente pelo JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -859,10 +946,20 @@
                 })
             })
             
+            // Inicialização das sub-abas de usuários
+            var triggerPillsList = [].slice.call(document.querySelectorAll('#usuarios-tab button'))
+            triggerPillsList.forEach(function (triggerEl) {
+                var tabTrigger = new bootstrap.Tab(triggerEl)
+                triggerEl.addEventListener('click', function (event) {
+                    event.preventDefault()
+                    tabTrigger.show()
+                })
+            })
+            
             // Código para atualizar a fila
             document.getElementById('atualizar-fila').addEventListener('click', function() {
                 // Aqui seria implementada a lógica para atualizar a fila via API
-                alert('Atualizando fila de atendimento...');
+                buscarFilaAtendimento();
             });
             
             // Inicialização de formulários
@@ -889,6 +986,9 @@
                 // Lógica de cadastro de medicamento
                 alert('Medicamento cadastrado com sucesso!');
             });
+            
+            // Carregar usuários automaticamente ao iniciar a página
+            carregarUsuarios();
         });
         
         // Função para buscar a fila de atendimento via API
@@ -902,6 +1002,7 @@
                 atualizarFilaUI(data);
             } catch (error) {
                 console.error('Erro:', error);
+                alert('Erro ao buscar fila de atendimento: ' + error.message);
             }
         }
         
@@ -944,6 +1045,87 @@
                 5: 'Muito Baixa'
             };
             return prioridades[prioridade] || 'Normal';
+        }
+        
+        // Função para carregar todos os usuários
+        function carregarUsuarios() {
+            try {
+                // Simulação de dados para demonstração
+                // Em um ambiente real, isso seria substituído por uma chamada à API
+                const usuarios = [
+                    { id: 1, nome: 'Carlos Mendes', username: 'carlosm', email: 'carlos@exemplo.com', user_type: 'medico', crm: '12345-SP', especialidade: 'Cardiologia' },
+                    { id: 2, nome: 'Ana Souza', username: 'anas', email: 'ana@exemplo.com', user_type: 'medico', crm: '23456-SP', especialidade: 'Pediatria' },
+                    { id: 3, nome: 'Roberto Almeida', username: 'robertoa', email: 'roberto@exemplo.com', user_type: 'medico', crm: '34567-SP', especialidade: 'Ortopedia' },
+                    { id: 4, nome: 'João Silva', username: 'joaos', email: 'joao@exemplo.com', user_type: 'paciente', data_nascimento: '1980-05-15', fx_etaria: 'adulto' },
+                    { id: 5, nome: 'Maria Oliveira', username: 'mariao', email: 'maria@exemplo.com', user_type: 'paciente', data_nascimento: '1975-10-20', fx_etaria: 'adulto' },
+                    { id: 6, nome: 'Pedro Santos', username: 'pedros', email: 'pedro@exemplo.com', user_type: 'paciente', data_nascimento: '2010-03-08', fx_etaria: 'criança' },
+                    { id: 7, nome: 'Ana Costa', username: 'anac', email: 'anac@exemplo.com', user_type: 'paciente', data_nascimento: '1950-12-25', fx_etaria: 'idoso' }
+                ];
+                
+                // Atualizar a tabela de todos os usuários
+                const todosUsuariosLista = document.getElementById('todos-usuarios-lista');
+                todosUsuariosLista.innerHTML = '';
+                
+                usuarios.forEach(usuario => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${usuario.id}</td>
+                        <td>${usuario.nome}</td>
+                        <td>${usuario.username}</td>
+                        <td>${usuario.email}</td>
+                        <td>${usuario.user_type === 'medico' ? 'Médico' : 'Paciente'}</td>
+                    `;
+                    todosUsuariosLista.appendChild(row);
+                });
+                
+                // Atualizar a tabela de médicos
+                const medicosUsuariosLista = document.getElementById('medicos-usuarios-lista');
+                medicosUsuariosLista.innerHTML = '';
+                
+                const medicos = usuarios.filter(u => u.user_type === 'medico');
+                if (medicos.length === 0) {
+                    medicosUsuariosLista.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum médico cadastrado</td></tr>';
+                } else {
+                    medicos.forEach(medico => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${medico.id}</td>
+                            <td>${medico.nome}</td>
+                            <td>${medico.crm}</td>
+                            <td>${medico.especialidade}</td>
+                            <td>${medico.email}</td>
+                        `;
+                        medicosUsuariosLista.appendChild(row);
+                    });
+                }
+                
+                // Atualizar a tabela de pacientes
+                const pacientesUsuariosLista = document.getElementById('pacientes-usuarios-lista');
+                pacientesUsuariosLista.innerHTML = '';
+                
+                const pacientes = usuarios.filter(u => u.user_type === 'paciente');
+                if (pacientes.length === 0) {
+                    pacientesUsuariosLista.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum paciente cadastrado</td></tr>';
+                } else {
+                    pacientes.forEach(paciente => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${paciente.id}</td>
+                            <td>${paciente.nome}</td>
+                            <td>${paciente.data_nascimento}</td>
+                            <td>${paciente.fx_etaria}</td>
+                            <td>${paciente.email}</td>
+                        `;
+                        pacientesUsuariosLista.appendChild(row);
+                    });
+                }
+                
+                console.log('Usuários carregados com sucesso!');
+                
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao carregar usuários: ' + error.message);
+            }
         }
     </script>
 </body>
