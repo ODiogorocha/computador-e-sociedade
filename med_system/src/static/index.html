@@ -3,41 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Gerenciamento de Usuários</title>
+    <title>MedSystem - Sistema de Cadastro Médico</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #3498db;
-            --secondary-color: #2980b9;
-            --success-color: #2ecc71;
-            --danger-color: #e74c3c;
-            --warning-color: #f39c12;
+            --primary-color: #4a6baf;
+            --secondary-color: #3a5795;
+            --accent-color: #5bc0de;
+            --success-color: #5cb85c;
+            --danger-color: #d9534f;
+            --warning-color: #f0ad4e;
             --light-bg: #f8f9fa;
             --dark-bg: #343a40;
+            --text-color: #333;
+            --light-text: #f8f9fa;
         }
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f0f2f5;
             margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            padding: 0;
+            color: var(--text-color);
         }
         
         .header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
             padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         
         .header h1 {
@@ -46,8 +42,55 @@
             font-size: 2.2rem;
         }
         
-        .card {
+        .header p {
+            margin: 5px 0 0;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .nav-tabs {
             background-color: white;
+            border-radius: 10px 10px 0 0;
+            padding: 10px 10px 0 10px;
+            margin-bottom: 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .nav-link {
+            color: var(--text-color);
+            font-weight: 500;
+            border-radius: 5px 5px 0 0 !important;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+        
+        .nav-link.active {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+            border-color: var(--primary-color) !important;
+        }
+        
+        .tab-content {
+            background-color: white;
+            border-radius: 0 0 10px 10px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            min-height: 400px;
+        }
+        
+        .tab-pane {
+            padding: 15px 0;
+        }
+        
+        .card {
+            border: none;
             border-radius: 10px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
             margin-bottom: 25px;
@@ -102,7 +145,7 @@
         .form-control:focus {
             border-color: var(--primary-color);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
+            box-shadow: 0 0 0 3px rgba(74, 107, 175, 0.25);
         }
         
         .btn {
@@ -136,7 +179,7 @@
         }
         
         .btn-success:hover {
-            background-color: #27ae60;
+            background-color: #4cae4c;
         }
         
         .btn-danger {
@@ -145,7 +188,7 @@
         }
         
         .btn-danger:hover {
-            background-color: #c0392b;
+            background-color: #c9302c;
         }
         
         .btn-warning {
@@ -154,7 +197,58 @@
         }
         
         .btn-warning:hover {
-            background-color: #e67e22;
+            background-color: #ec971f;
+        }
+        
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            border-collapse: collapse;
+        }
+        
+        .table th,
+        .table td {
+            padding: 12px;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        .table thead th {
+            vertical-align: bottom;
+            border-bottom: 2px solid #dee2e6;
+            background-color: #f8f9fa;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+        }
+        
+        .badge {
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 12px;
+        }
+        
+        .badge-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .badge-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+        
+        .badge-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .badge-warning {
+            background-color: var(--warning-color);
+            color: white;
         }
         
         .result-container {
@@ -185,9 +279,101 @@
             font-size: 14px;
         }
         
+        /* Estilos específicos para a fila de atendimento */
+        .queue-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+            border-left: 5px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .queue-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .queue-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+        
+        .queue-info {
+            flex-grow: 1;
+        }
+        
+        .queue-name {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .queue-details {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .queue-priority {
+            margin-left: 10px;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 12px;
+        }
+        
+        .priority-1 {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .priority-2 {
+            background-color: #fd7e14;
+            color: white;
+        }
+        
+        .priority-3 {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .priority-4 {
+            background-color: #20c997;
+            color: white;
+        }
+        
+        .priority-5 {
+            background-color: #0dcaf0;
+            color: white;
+        }
+        
+        /* Responsividade */
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 1.8rem;
+            }
+            
+            .header p {
+                font-size: 1rem;
+            }
+            
+            .nav-link {
+                padding: 8px 12px;
+                font-size: 0.9rem;
+            }
+            
+            .tab-content {
+                padding: 15px;
             }
             
             .card-header {
@@ -202,280 +388,562 @@
                 padding: 8px 16px;
                 font-size: 14px;
             }
+            
+            .queue-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .queue-number {
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-users"></i> Sistema de Gerenciamento de Usuários</h1>
-        </div>
+    <div class="header">
+        <h1><i class="fas fa-hospital"></i> MedSystem</h1>
+        <p>Sistema de Cadastro Médico</p>
+    </div>
 
-        <!-- Listar Todos os Usuários -->
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-list"></i> Listar Todos os Usuários (GET /users)
-            </div>
-            <div class="card-body">
-                <button class="btn btn-primary" onclick="getUsers()">
-                    <i class="fas fa-search"></i> Buscar Usuários
+    <div class="container mt-4 mb-5">
+        <!-- Navegação por abas -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="pacientes-tab" data-bs-toggle="tab" data-bs-target="#pacientes" type="button" role="tab" aria-controls="pacientes" aria-selected="true">
+                    <i class="fas fa-user-injured"></i> Pacientes
                 </button>
-                <div id="get-users-result" class="result-container"></div>
-            </div>
-        </div>
-
-        <!-- Criar Usuário -->
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-user-plus"></i> Criar Novo Usuário (POST /users)
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="create-username" class="form-label">Nome de Usuário:</label>
-                    <input type="text" id="create-username" name="username" class="form-control" placeholder="Digite o nome de usuário">
-                </div>
-                <div class="form-group">
-                    <label for="create-email" class="form-label">Email:</label>
-                    <input type="email" id="create-email" name="email" class="form-control" placeholder="Digite o email">
-                </div>
-                <button class="btn btn-success" onclick="createUser()">
-                    <i class="fas fa-plus-circle"></i> Criar Usuário
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="medicos-tab" data-bs-toggle="tab" data-bs-target="#medicos" type="button" role="tab" aria-controls="medicos" aria-selected="false">
+                    <i class="fas fa-user-md"></i> Médicos
                 </button>
-                <div id="create-user-result" class="result-container"></div>
-            </div>
-        </div>
-
-        <!-- Buscar Usuário Específico -->
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-user-check"></i> Buscar Usuário Específico (GET /users/&lt;id&gt;)
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="get-user-id" class="form-label">ID do Usuário:</label>
-                    <input type="number" id="get-user-id" name="user_id" class="form-control" placeholder="Digite o ID do usuário">
-                </div>
-                <button class="btn btn-primary" onclick="getUser()">
-                    <i class="fas fa-search"></i> Buscar Usuário
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="fila-tab" data-bs-toggle="tab" data-bs-target="#fila" type="button" role="tab" aria-controls="fila" aria-selected="false">
+                    <i class="fas fa-list-ol"></i> Fila de Atendimento
                 </button>
-                <div id="get-user-result" class="result-container"></div>
-            </div>
-        </div>
-
-        <!-- Atualizar Usuário -->
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-user-edit"></i> Atualizar Usuário (PUT /users/&lt;id&gt;)
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="update-user-id" class="form-label">ID do Usuário:</label>
-                    <input type="number" id="update-user-id" name="user_id" class="form-control" placeholder="Digite o ID do usuário">
-                </div>
-                <div class="form-group">
-                    <label for="update-username" class="form-label">Novo Nome de Usuário:</label>
-                    <input type="text" id="update-username" name="username" class="form-control" placeholder="Digite o novo nome de usuário">
-                </div>
-                <div class="form-group">
-                    <label for="update-email" class="form-label">Novo Email:</label>
-                    <input type="email" id="update-email" name="email" class="form-control" placeholder="Digite o novo email">
-                </div>
-                <button class="btn btn-warning" onclick="updateUser()">
-                    <i class="fas fa-edit"></i> Atualizar Usuário
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="hospital-tab" data-bs-toggle="tab" data-bs-target="#hospital" type="button" role="tab" aria-controls="hospital" aria-selected="false">
+                    <i class="fas fa-hospital-alt"></i> Hospital
                 </button>
-                <div id="update-user-result" class="result-container"></div>
-            </div>
-        </div>
-
-        <!-- Excluir Usuário -->
-        <div class="card">
-            <div class="card-header">
-                <i class="fas fa-user-minus"></i> Excluir Usuário (DELETE /users/&lt;id&gt;)
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="delete-user-id" class="form-label">ID do Usuário:</label>
-                    <input type="number" id="delete-user-id" name="user_id" class="form-control" placeholder="Digite o ID do usuário">
+            </li>
+        </ul>
+        
+        <!-- Conteúdo das abas -->
+        <div class="tab-content" id="myTabContent">
+            <!-- Aba de Pacientes -->
+            <div class="tab-pane fade show active" id="pacientes" role="tabpanel" aria-labelledby="pacientes-tab">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-user-plus"></i> Cadastro de Paciente
+                            </div>
+                            <div class="card-body">
+                                <form id="form-cadastro-paciente">
+                                    <div class="form-group">
+                                        <label for="paciente-nome" class="form-label">Nome Completo:</label>
+                                        <input type="text" id="paciente-nome" class="form-control" placeholder="Digite o nome completo">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="paciente-data-nascimento" class="form-label">Data de Nascimento:</label>
+                                        <input type="date" id="paciente-data-nascimento" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="paciente-email" class="form-label">Email:</label>
+                                        <input type="email" id="paciente-email" class="form-control" placeholder="Digite o email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="paciente-senha" class="form-label">Senha:</label>
+                                        <input type="password" id="paciente-senha" class="form-control" placeholder="Digite a senha">
+                                    </div>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-save"></i> Cadastrar Paciente
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-clipboard-list"></i> Meus Dados
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="paciente-login" class="form-label">Email/Username:</label>
+                                    <input type="text" id="paciente-login" class="form-control" placeholder="Digite seu email ou username">
+                                </div>
+                                <div class="form-group">
+                                    <label for="paciente-login-senha" class="form-label">Senha:</label>
+                                    <input type="password" id="paciente-login-senha" class="form-control" placeholder="Digite sua senha">
+                                </div>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-sign-in-alt"></i> Acessar Meus Dados
+                                </button>
+                                
+                                <div class="mt-4">
+                                    <h5>Informações do Paciente</h5>
+                                    <div id="paciente-info" class="result-container">
+                                        Faça login para visualizar seus dados
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button class="btn btn-danger" onclick="deleteUser()">
-                    <i class="fas fa-trash-alt"></i> Excluir Usuário
-                </button>
-                <div id="delete-user-result" class="result-container"></div>
+                
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-heartbeat"></i> Minhas Doenças e Medicamentos
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>Doenças Registradas</h5>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Doença</th>
+                                                    <th>Data Diagnóstico</th>
+                                                    <th>Gravidade</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="lista-doencas">
+                                                <tr>
+                                                    <td colspan="3" class="text-center">Faça login para visualizar</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Medicamentos Prescritos</h5>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Medicamento</th>
+                                                    <th>Dosagem</th>
+                                                    <th>Frequência</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="lista-medicamentos">
+                                                <tr>
+                                                    <td colspan="3" class="text-center">Faça login para visualizar</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="footer">
-            <p>Sistema de Gerenciamento de Usuários &copy; 2025 - Todos os direitos reservados</p>
+            
+            <!-- Aba de Médicos -->
+            <div class="tab-pane fade" id="medicos" role="tabpanel" aria-labelledby="medicos-tab">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-user-md"></i> Acesso Médico
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="medico-login" class="form-label">CRM/Email:</label>
+                                    <input type="text" id="medico-login" class="form-control" placeholder="Digite seu CRM ou email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="medico-senha" class="form-label">Senha:</label>
+                                    <input type="password" id="medico-senha" class="form-control" placeholder="Digite sua senha">
+                                </div>
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-sign-in-alt"></i> Acessar Sistema
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <i class="fas fa-pills"></i> Cadastrar Medicamento
+                            </div>
+                            <div class="card-body">
+                                <form id="form-cadastro-medicamento">
+                                    <div class="form-group">
+                                        <label for="medicamento-nome" class="form-label">Nome do Medicamento:</label>
+                                        <input type="text" id="medicamento-nome" class="form-control" placeholder="Digite o nome do medicamento">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="medicamento-descricao" class="form-label">Descrição:</label>
+                                        <textarea id="medicamento-descricao" class="form-control" rows="3" placeholder="Digite a descrição do medicamento"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-save"></i> Cadastrar Medicamento
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fas fa-disease"></i> Cadastrar Doença
+                            </div>
+                            <div class="card-body">
+                                <form id="form-cadastro-doenca">
+                                    <div class="form-group">
+                                        <label for="doenca-nome" class="form-label">Nome da Doença:</label>
+                                        <input type="text" id="doenca-nome" class="form-control" placeholder="Digite o nome da doença">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="doenca-descricao" class="form-label">Descrição:</label>
+                                        <textarea id="doenca-descricao" class="form-control" rows="3" placeholder="Digite a descrição da doença"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-save"></i> Cadastrar Doença
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <i class="fas fa-user-injured"></i> Gerenciar Pacientes
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="buscar-paciente" class="form-label">Buscar Paciente:</label>
+                                    <div class="input-group">
+                                        <input type="text" id="buscar-paciente" class="form-control" placeholder="Digite o nome ou ID do paciente">
+                                        <button class="btn btn-primary">
+                                            <i class="fas fa-search"></i> Buscar
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3">
+                                    <h5>Resultados da Busca</h5>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nome</th>
+                                                <th>Idade</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="resultado-busca-pacientes">
+                                            <tr>
+                                                <td colspan="4" class="text-center">Nenhum resultado</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Aba de Fila de Atendimento -->
+            <div class="tab-pane fade" id="fila" role="tabpanel" aria-labelledby="fila-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-list-ol"></i> Fila de Atendimento
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5>Posição atual na fila</h5>
+                            <button class="btn btn-primary" id="atualizar-fila">
+                                <i class="fas fa-sync-alt"></i> Atualizar Fila
+                            </button>
+                        </div>
+                        
+                        <div id="fila-container">
+                            <!-- Item de exemplo na fila -->
+                            <div class="queue-item">
+                                <div class="queue-number">1</div>
+                                <div class="queue-info">
+                                    <div class="queue-name">João Silva</div>
+                                    <div class="queue-details">Dr. Carlos Mendes • 09:30</div>
+                                </div>
+                                <span class="badge queue-priority priority-1">Urgente</span>
+                            </div>
+                            
+                            <div class="queue-item">
+                                <div class="queue-number">2</div>
+                                <div class="queue-info">
+                                    <div class="queue-name">Maria Oliveira</div>
+                                    <div class="queue-details">Dra. Ana Souza • 09:45</div>
+                                </div>
+                                <span class="badge queue-priority priority-2">Alta</span>
+                            </div>
+                            
+                            <div class="queue-item">
+                                <div class="queue-number">3</div>
+                                <div class="queue-info">
+                                    <div class="queue-name">Pedro Santos</div>
+                                    <div class="queue-details">Dr. Roberto Almeida • 10:00</div>
+                                </div>
+                                <span class="badge queue-priority priority-3">Normal</span>
+                            </div>
+                            
+                            <div class="queue-item">
+                                <div class="queue-number">4</div>
+                                <div class="queue-info">
+                                    <div class="queue-name">Ana Costa</div>
+                                    <div class="queue-details">Dra. Juliana Ferreira • 10:15</div>
+                                </div>
+                                <span class="badge queue-priority priority-4">Baixa</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <h5>Legenda de Prioridades</h5>
+                            <div class="d-flex flex-wrap gap-2">
+                                <span class="badge priority-1">Urgente</span>
+                                <span class="badge priority-2">Alta</span>
+                                <span class="badge priority-3">Normal</span>
+                                <span class="badge priority-4">Baixa</span>
+                                <span class="badge priority-5">Muito Baixa</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <i class="fas fa-info-circle"></i> Informações sobre a Fila
+                    </div>
+                    <div class="card-body">
+                        <p>A fila de atendimento é organizada automaticamente com base nos seguintes critérios:</p>
+                        <ul>
+                            <li><strong>Nível de prioridade da consulta:</strong> Urgente > Alta > Normal > Baixa > Muito Baixa</li>
+                            <li><strong>Faixa etária do paciente:</strong> Crianças e idosos têm prioridade</li>
+                            <li><strong>Horário agendado:</strong> Consultas com horário mais cedo têm prioridade</li>
+                        </ul>
+                        <p>A fila é atualizada em tempo real. Clique em "Atualizar Fila" para ver as mudanças mais recentes.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Aba de Hospital -->
+            <div class="tab-pane fade" id="hospital" role="tabpanel" aria-labelledby="hospital-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-user-md"></i> Cadastro de Médico
+                    </div>
+                    <div class="card-body">
+                        <form id="form-cadastro-medico">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="medico-nome" class="form-label">Nome Completo:</label>
+                                        <input type="text" id="medico-nome" class="form-control" placeholder="Digite o nome completo">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="medico-crm" class="form-label">CRM:</label>
+                                        <input type="text" id="medico-crm" class="form-control" placeholder="Digite o CRM">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="medico-especialidade" class="form-label">Especialidade:</label>
+                                        <input type="text" id="medico-especialidade" class="form-control" placeholder="Digite a especialidade">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="medico-email" class="form-label">Email:</label>
+                                        <input type="email" id="medico-email" class="form-control" placeholder="Digite o email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="medico-senha-cadastro" class="form-label">Senha:</label>
+                                        <input type="password" id="medico-senha-cadastro" class="form-control" placeholder="Digite a senha">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="medico-confirmar-senha" class="form-label">Confirmar Senha:</label>
+                                        <input type="password" id="medico-confirmar-senha" class="form-control" placeholder="Confirme a senha">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-success mt-3">
+                                <i class="fas fa-user-plus"></i> Cadastrar Médico
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <i class="fas fa-hospital-alt"></i> Informações do Hospital
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Médicos Cadastrados</h5>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Especialidade</th>
+                                            <th>CRM</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="lista-medicos">
+                                        <tr>
+                                            <td>Dr. Carlos Mendes</td>
+                                            <td>Cardiologia</td>
+                                            <td>12345-SP</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Dra. Ana Souza</td>
+                                            <td>Pediatria</td>
+                                            <td>23456-SP</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Dr. Roberto Almeida</td>
+                                            <td>Ortopedia</td>
+                                            <td>34567-SP</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Estatísticas</h5>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6>Total de Pacientes</h6>
+                                        <h2>248</h2>
+                                    </div>
+                                </div>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h6>Consultas Hoje</h6>
+                                        <h2>32</h2>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h6>Médicos Ativos</h6>
+                                        <h2>12</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <div class="footer">
+        <p>MedSystem - Sistema de Cadastro Médico &copy; 2025</p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const API_BASE_URL = '/api/users';
-
-        // Função auxiliar para exibir resultados
-        function displayResult(elementId, data, isError = false) {
-            const element = document.getElementById(elementId);
-            element.textContent = typeof data === 'object' ? JSON.stringify(data, null, 2) : data;
+        // Inicialização das abas
+        document.addEventListener('DOMContentLoaded', function() {
+            // Código para inicializar as abas do Bootstrap
+            var triggerTabList = [].slice.call(document.querySelectorAll('#myTab button'))
+            triggerTabList.forEach(function (triggerEl) {
+                var tabTrigger = new bootstrap.Tab(triggerEl)
+                triggerEl.addEventListener('click', function (event) {
+                    event.preventDefault()
+                    tabTrigger.show()
+                })
+            })
             
-            // Adicionar ou remover classes de estilo baseadas no tipo de resultado
-            if (isError) {
-                element.classList.add('result-error');
-                element.classList.remove('result-success');
-            } else {
-                element.classList.add('result-success');
-                element.classList.remove('result-error');
-            }
-        }
-
-        // Função auxiliar para exibir erros
-        function displayError(elementId, error) {
-            displayResult(elementId, `Erro: ${error.message || error}`, true);
-        }
-
-        // GET /users - Listar todos os usuários
-        async function getUsers() {
-            const resultElementId = 'get-users-result';
+            // Código para atualizar a fila
+            document.getElementById('atualizar-fila').addEventListener('click', function() {
+                // Aqui seria implementada a lógica para atualizar a fila via API
+                alert('Atualizando fila de atendimento...');
+            });
+            
+            // Inicialização de formulários
+            document.getElementById('form-cadastro-paciente').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Lógica de cadastro de paciente
+                alert('Paciente cadastrado com sucesso!');
+            });
+            
+            document.getElementById('form-cadastro-medico').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Lógica de cadastro de médico
+                alert('Médico cadastrado com sucesso!');
+            });
+            
+            document.getElementById('form-cadastro-doenca').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Lógica de cadastro de doença
+                alert('Doença cadastrada com sucesso!');
+            });
+            
+            document.getElementById('form-cadastro-medicamento').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Lógica de cadastro de medicamento
+                alert('Medicamento cadastrado com sucesso!');
+            });
+        });
+        
+        // Função para buscar a fila de atendimento via API
+        async function buscarFilaAtendimento() {
             try {
-                const response = await fetch(API_BASE_URL);
-                if (!response.ok) throw new Error(`Erro HTTP! Status: ${response.status}`);
-                const data = await response.json();
-                displayResult(resultElementId, data);
-            } catch (error) {
-                displayError(resultElementId, error);
-            }
-        }
-
-        // POST /users - Criar novo usuário
-        async function createUser() {
-            const resultElementId = 'create-user-result';
-            const username = document.getElementById('create-username').value;
-            const email = document.getElementById('create-email').value;
-            
-            if (!username || !email) {
-                displayError(resultElementId, 'Nome de usuário e email não podem estar vazios');
-                return;
-            }
-            
-            try {
-                const response = await fetch(API_BASE_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email })
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) throw new Error(data.message || `Erro HTTP! Status: ${response.status}`);
-                
-                displayResult(resultElementId, data);
-                
-                // Limpar campos de entrada
-                document.getElementById('create-username').value = '';
-                document.getElementById('create-email').value = '';
-            } catch (error) {
-                displayError(resultElementId, error);
-            }
-        }
-
-        // GET /users/<id> - Buscar usuário específico
-        async function getUser() {
-            const resultElementId = 'get-user-result';
-            const userId = document.getElementById('get-user-id').value;
-            
-            if (!userId) {
-                displayError(resultElementId, 'ID do usuário não pode estar vazio');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/${userId}`);
-                
-                if (response.status === 404) throw new Error('Usuário não encontrado');
-                if (!response.ok) throw new Error(`Erro HTTP! Status: ${response.status}`);
-                
-                const data = await response.json();
-                displayResult(resultElementId, data);
-            } catch (error) {
-                displayError(resultElementId, error);
-            }
-        }
-
-        // PUT /users/<id> - Atualizar usuário
-        async function updateUser() {
-            const resultElementId = 'update-user-result';
-            const userId = document.getElementById('update-user-id').value;
-            const username = document.getElementById('update-username').value;
-            const email = document.getElementById('update-email').value;
-            
-            if (!userId) {
-                displayError(resultElementId, 'ID do usuário não pode estar vazio');
-                return;
-            }
-            
-            const updateData = {};
-            if (username) updateData.username = username;
-            if (email) updateData.email = email;
-            
-            if (Object.keys(updateData).length === 0) {
-                displayError(resultElementId, 'Por favor, insira um nome de usuário ou email para atualizar');
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/${userId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updateData)
-                });
-                
-                if (response.status === 404) throw new Error('Usuário não encontrado');
-                
-                const data = await response.json();
-                
-                if (!response.ok) throw new Error(data.message || `Erro HTTP! Status: ${response.status}`);
-                
-                displayResult(resultElementId, data);
-                
-                // Limpar campos de entrada
-                document.getElementById('update-username').value = '';
-                document.getElementById('update-email').value = '';
-            } catch (error) {
-                displayError(resultElementId, error);
-            }
-        }
-
-        // DELETE /users/<id> - Excluir usuário
-        async function deleteUser() {
-            const resultElementId = 'delete-user-result';
-            const userId = document.getElementById('delete-user-id').value;
-            
-            if (!userId) {
-                displayError(resultElementId, 'ID do usuário não pode estar vazio');
-                return;
-            }
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/${userId}`, {
-                    method: 'DELETE'
-                });
-                
-                if (response.status === 404) throw new Error('Usuário não encontrado');
-                if (!response.ok && response.status !== 204) throw new Error(`Erro HTTP! Status: ${response.status}`);
-                
-                // 204 No Content indica sucesso
-                if (response.status === 204) {
-                    displayResult(resultElementId, { mensagem: `Usuário com ID ${userId} foi excluído com sucesso` });
-                } else {
-                    // Tentar ler possível mensagem de erro mesmo em status de sucesso se não for 204
-                    const data = await response.text();
-                    displayResult(resultElementId, data || { mensagem: `Exclusão bem-sucedida, código de status: ${response.status}` });
+                const response = await fetch('/api/fila');
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar fila de atendimento');
                 }
-                
-                // Limpar campo de entrada
-                document.getElementById('delete-user-id').value = '';
+                const data = await response.json();
+                atualizarFilaUI(data);
             } catch (error) {
-                displayError(resultElementId, error);
+                console.error('Erro:', error);
             }
+        }
+        
+        // Função para atualizar a UI da fila com os dados da API
+        function atualizarFilaUI(filaData) {
+            const filaContainer = document.getElementById('fila-container');
+            filaContainer.innerHTML = '';
+            
+            if (filaData.length === 0) {
+                filaContainer.innerHTML = '<p class="text-center">Não há pacientes na fila de atendimento.</p>';
+                return;
+            }
+            
+            filaData.forEach((item, index) => {
+                const prioridadeClass = `priority-${item.prioridade}`;
+                const prioridadeTexto = getPrioridadeTexto(item.prioridade);
+                
+                const itemHTML = `
+                    <div class="queue-item">
+                        <div class="queue-number">${index + 1}</div>
+                        <div class="queue-info">
+                            <div class="queue-name">${item.nome_paciente}</div>
+                            <div class="queue-details">Dr. ${item.nome_medico} • ${item.hora}</div>
+                        </div>
+                        <span class="badge queue-priority ${prioridadeClass}">${prioridadeTexto}</span>
+                    </div>
+                `;
+                
+                filaContainer.innerHTML += itemHTML;
+            });
+        }
+        
+        // Função auxiliar para obter texto da prioridade
+        function getPrioridadeTexto(prioridade) {
+            const prioridades = {
+                1: 'Urgente',
+                2: 'Alta',
+                3: 'Normal',
+                4: 'Baixa',
+                5: 'Muito Baixa'
+            };
+            return prioridades[prioridade] || 'Normal';
         }
     </script>
 </body>
